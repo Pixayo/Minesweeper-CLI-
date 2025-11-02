@@ -61,7 +61,18 @@ class FieldTest {
 
     @Test
     void test_Explore() {
-        assertTrue(center.explore());
+        center.toggleFlagged();
+        boolean test1 = center.explore();
+
+        center.reset();
+        boolean test2 = center.explore();
+
+        center.reset();
+        center.addNeighbor(neighbor1);
+        boolean test3 = center.explore();
+        boolean test4 = neighbor1.isExplored();
+
+        assertTrue((!test1) && test2 && test3 && test4);
     }
 
     @Test

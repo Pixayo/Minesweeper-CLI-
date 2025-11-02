@@ -21,6 +21,8 @@ public class Field {
     }
 
     public boolean addNeighbor(Field neighbor) {
+        if (neighbor == null) return false;
+
         int delta = Math.abs((this.X - neighbor.X) + (this.Y - neighbor.Y));
 
         if (delta == 1 || delta == 2) {
