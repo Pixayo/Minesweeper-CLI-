@@ -1,5 +1,6 @@
 package model;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -56,5 +57,24 @@ class FieldTest {
         };
 
         assertEquals(expectedGrid, displayGrid.get());
+    }
+
+    @Test
+    void test_Explore() {
+        assertTrue(center.explore());
+    }
+
+    @Test
+    void test_IsObjectiveReached() {
+        center.placeMine();
+        boolean test1 = center.isObjectiveReached();
+
+        neighbor1.toggleFlagged();
+        boolean test2 = neighbor1.isObjectiveReached();
+
+        neighbor2.explore();
+        boolean test3 = neighbor2.isObjectiveReached();
+
+        assertTrue((!test1) && (!test2) && test3);
     }
 }
