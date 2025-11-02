@@ -12,11 +12,11 @@ public class Board {
     private final int totalFields;
     private final int totalMines;
 
-    public Board(int rowSize, int columnSize, int difficult) {
-        this.columns = columnSize;
-        this.rows = rowSize;
+    public Board(int rows, int columns, int difficult) {
+        this.columns = columns;
+        this.rows = rows;
 
-        this.totalFields = rowSize * columnSize;
+        this.totalFields = rows * columns;
         this.totalMines = Math.max(totalFields / difficult, 1);
 
         instantiateBoardFields();
@@ -26,6 +26,13 @@ public class Board {
 
     public void resetBoard() {
         board.forEach(Field::reset);
+    }
+
+    public boolean isObjetiveComplete() {
+        for (Field field : board) {
+            if (!field.isObjectiveReached()) return false;
+        }
+        return true;
     }
 
     private void instantiateBoardFields() {
@@ -55,8 +62,21 @@ public class Board {
                continue;
            } else {
                randomField.placeMine();
+               minesPlaced++;
            }
-           minesPlaced = board.stream().filter(Field::isMined).count();
         } while(minesPlaced < totalMines);
+    }
+
+    // --- Getters ---
+    public List<Field> copyBoardList() {
+        return List.copyOf(board);
+    }
+
+    public int getTotalFields() {
+        return totalFields;
+    }
+
+    public int getTotalMines() {
+        return totalMines;
     }
 }

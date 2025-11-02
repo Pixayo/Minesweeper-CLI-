@@ -83,7 +83,7 @@ public class Field {
         return neighbors.stream().filter(Field::isMined).count();
     }
 
-    // ---- Setters ---
+    // --- Setters ---
     public void toggleFlagged() {
         if (!explored) flagged = !flagged;
     }
@@ -92,7 +92,7 @@ public class Field {
         mined = true;
     }
 
-    // ---- Getters ---
+    // --- Getters ---
     public boolean isExplored() {
         return explored;
     }
