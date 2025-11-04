@@ -20,8 +20,8 @@ class BoardTest {
     }
 
     @Test
-    public void test_ObjetiveReached() {
-        assertFalse(board.isObjetiveComplete());
+    public void test_ObjectiveReached() {
+        assertFalse(board.isObjectiveComplete());
     }
 
     @Test

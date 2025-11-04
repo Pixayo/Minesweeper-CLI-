@@ -1,6 +1,6 @@
 package model;
 
-import exceptions.ExplosionExeception;
+import exceptions.ExplosionException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +23,13 @@ public class Field {
     public boolean addNeighbor(Field neighbor) {
         if (neighbor == null) return false;
 
-        int delta = Math.abs((this.X - neighbor.X) + (this.Y - neighbor.Y));
+        boolean sameRow = (this.Y == neighbor.Y);
+        boolean sameColumn = (this.X == neighbor.X);
+        boolean diagonal = (!sameRow) && (!sameColumn);
 
-        if (delta == 1 || delta == 2) {
+        int delta = Math.abs(this.X - neighbor.X) + Math.abs(this.Y - neighbor.Y);
+
+        if (delta == 1 || (delta == 2 && diagonal)) {
             neighbors.add(neighbor);
             return true;
         } else {
@@ -35,12 +39,12 @@ public class Field {
 
     public boolean explore() {
         if (!explored && !flagged) {
-            this.explored = true;
+            explored = true;
 
             if (mined) {
-                throw new ExplosionExeception();
+                throw new ExplosionException();
             }
-            if (isNeighborsSafe()) {
+            if(isNeighborsSafe()) {
                 neighbors.forEach(Field::explore);
             }
 
@@ -93,6 +97,14 @@ public class Field {
     }
 
     // --- Getters ---
+    public int getRow() {
+        return X;
+    }
+
+    public int getColumn() {
+        return Y;
+    }
+
     public boolean isExplored() {
         return explored;
     }
