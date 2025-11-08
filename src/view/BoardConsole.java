@@ -58,6 +58,7 @@ public class BoardConsole {
 
             System.out.println(board);
             System.out.println("You Won!!!");
+
         } catch (ExplosionException e) {
             System.out.println(board);
             System.out.println("Don't dig mines!!!");

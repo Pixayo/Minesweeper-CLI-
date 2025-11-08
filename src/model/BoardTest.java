@@ -27,6 +27,6 @@ class BoardTest {
     @Test
     public void test_MinePlacement() {
         int minesCount = (int) boardList.stream().filter(Field::isMined).count();
-        assertEquals(board.getTotalMines(), minesCount);
+        assertEquals(board.getMines(), minesCount);
     }
 }

@@ -1,5 +1,8 @@
 package model;
 
+import exceptions.ExplosionException;
+import exceptions.MinesOverloadException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -9,16 +12,17 @@ public class Board {
     private final List<Field> board = new ArrayList<>();
     private final int columns;
     private final int rows;
+    private final int mines;
 
-    private final int totalFields;
-    private final int totalMines;
-
-    public Board(int rows, int columns, int difficult) {
+    public Board(int rows, int columns, int mines) {
         this.columns = columns;
         this.rows = rows;
 
-        this.totalFields = rows * columns;
-        this.totalMines = Math.max(totalFields / difficult, 1);
+        if (mines < 1 || mines > (rows * columns)) {
+            throw new MinesOverloadException();
+        } else {
+            this.mines = mines;
+        }
 
         instantiateBoardFields();
         connectNeighbors();
@@ -35,10 +39,15 @@ public class Board {
     }
 
     public void exploreFieldIn(int row, int column) {
-        board.parallelStream()
-                .filter(f -> f.getRow() == row && f.getColumn() == column)
-                .findFirst()
-                .ifPresent(Field::explore);
+        try {
+            board.parallelStream()
+                    .filter(f -> f.getRow() == row && f.getColumn() == column)
+                    .findFirst()
+                    .ifPresent(Field::explore);
+        } catch (ExplosionException e) {
+            board.forEach(Field::setExplored);
+            throw e;
+        }
     }
 
     public void flagFieldIn(int row, int column) {
@@ -87,10 +96,10 @@ public class Board {
         Predicate<Field> mined = (Field::isMined);
 
         do {
-            int random = (int) (Math.random() * totalFields);
+            int random = (int) (Math.random() * board.size());
             board.get(random).placeMine();
             minesPlaced = board.stream().filter(mined).count();
-        } while (minesPlaced < totalMines);
+        } while (minesPlaced < mines);
     }
 
     // --- Getters ---
@@ -98,11 +107,7 @@ public class Board {
         return List.copyOf(board);
     }
 
-    public int getTotalFields() {
-        return totalFields;
-    }
-
-    public int getTotalMines() {
-        return totalMines;
+    public int getMines() {
+        return mines;
     }
 }

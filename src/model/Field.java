@@ -88,11 +88,15 @@ public class Field {
     }
 
     // --- Setters ---
-    public void toggleFlagged() {
+    void toggleFlagged() {
         if (!explored) flagged = !flagged;
     }
 
-    public void placeMine() {
+    void setExplored() {
+        explored = true;
+    }
+
+    void placeMine() {
         mined = true;
     }
 
@@ -107,10 +111,6 @@ public class Field {
 
     public boolean isExplored() {
         return explored;
-    }
-
-    public boolean isFlagged() {
-        return flagged;
     }
 
     public boolean isMined() {
